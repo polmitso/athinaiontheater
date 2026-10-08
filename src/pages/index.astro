@@ -1,0 +1,15 @@
+---
+import {shows} from '../lib/pocketbase.js';
+const productions=await shows();
+const root='https://admin.videotheatre.gr/api/files/media/';
+const photo=root+'hfut6yay1aq8vpf/central_lights_iaakjev6wa.png';
+const upstage=root+'x36bdnm6rxknqk8/fixed_photos_2_qu786jay2o.png';
+const logo=root+'29nn36f40ai14fd/athinaion_logo_web_white_transparent_cts3spf9y7.png';
+---
+<!doctype html><html lang="el"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content="Θέατρο Αθήναιον Θεσσαλονίκη — παραστάσεις, Κεντρική Σκηνή, Upstage και ενοικίαση χώρων."/><title>Θέατρο Αθήναιον | Θεσσαλονίκη</title><link rel="stylesheet" href="/style.css"/></head><body>
+<header class="top shell"><a href="/" aria-label="Αθήναιον αρχική"><img class="brand" src={logo} alt="Θέατρο Αθήναιον"/></a><nav><a href="#shows">ΠΑΡΑΣΤΑΣΕΙΣ</a><a href="#stages">ΟΙ ΣΚΗΝΕΣ ΜΑΣ</a><a href="#hire">ΕΝΟΙΚΙΑΣΗ ΧΩΡΩΝ</a><a href="#contact">ΕΠΙΚΟΙΝΩΝΙΑ</a></nav></header>
+<main><section class="hero"><img class="heroPhoto" src={photo} alt="Κεντρική σκηνή του Θεάτρου Αθήναιον"/><div class="shell heroText"><small>ΘΕΣΣΑΛΟΝΙΚΗ / LIVE THEATRE</small><h1>Η ΣΚΗΝΗ<br/>ΖΩΝΤΑΝΕΥΕΙ.</h1><p>Παραστάσεις, δημιουργοί και ιστορίες που συναντούν το κοινό στο Θέατρο Αθήναιον.</p><a class="lineLink" href="#shows">ΔΕΙΤΕ ΤΙΣ ΠΑΡΑΣΤΑΣΕΙΣ ↗</a></div></section>
+<section id="shows" class="section shell"><div class="sectionHead"><div><small>01 / ON STAGE</small><h2>ΠΑΡΑΣΤΑΣΕΙΣ.</h2></div></div><div class="shows">{productions.length?productions.map(p=><a class="show" href={`https://preview.videotheatre.gr/productions/${p.slug}`}><div class="poster">{p.poster?<img src={p.poster} alt={p.title} loading="lazy"/>:<span>ΑΘΗΝΑΙΟΝ</span>}</div><h3>{p.title}</h3></a>):<p class="empty">Οι επόμενες παραστάσεις θα ανακοινωθούν σύντομα.</p>}</div></section>
+<section id="stages" class="section shell"><div class="sectionHead"><div><small>02 / OUR STAGES</small><h2>ΟΙ ΣΚΗΝΕΣ ΜΑΣ.</h2></div></div><div class="stages"><article class="stage"><img src={photo} alt="Κεντρική Σκηνή"/><div><small>01 / MAIN STAGE</small><h3>ΚΕΝΤΡΙΚΗ ΣΚΗΝΗ</h3><p>Η μεγάλη θεατρική αίθουσα του Αθήναιον.</p></div></article><article class="stage"><img src={upstage} alt="Upstage"/><div><small>02 / UPSTAGE</small><h3>UPSTAGE</h3><p>Ένας πιο ευέλικτος χώρος για ζωντανές παραστάσεις.</p></div></article></div></section>
+<section id="hire" class="section shell hire"><div><small>03 / VENUE HIRE</small><h2>Ο ΧΩΡΟΣ<br/>ΓΙΑ ΤΗ ΔΙΚΗ ΣΑΣ<br/>ΠΑΡΑΓΩΓΗ.</h2></div><div><p>Η Κεντρική Σκηνή και το Upstage διατίθενται για θεατρικές παραστάσεις, εκδηλώσεις και συνεργασίες.</p><a class="lineLink" href="#contact">ΠΛΗΡΟΦΟΡΙΕΣ ΕΝΟΙΚΙΑΣΗΣ ↗</a></div></section></main>
+<footer id="contact" class="shell footer"><span>ΘΕΑΤΡΟ ΑΘΗΝΑΙΟΝ · ΘΕΣΣΑΛΟΝΙΚΗ</span><span>VIDEO THEATRE</span></footer></body></html>

@@ -1,0 +1,4 @@
+---
+import Site from '../layouts/Site.astro';import {photo,upstage,upstageLogo} from '../lib/assets.js';
+---
+<Site title="Οι Σκηνές μας"><main class="shell innerPage"><small>02 / OUR STAGES</small><h1>ΟΙ ΣΚΗΝΕΣ ΜΑΣ.</h1><div class="stages"><article class="stage"><img src={photo} alt="Κεντρική Σκηνή"/><div><h3>ΚΕΝΤΡΙΚΗ ΣΚΗΝΗ</h3><p>Η μεγάλη θεατρική αίθουσα του Αθήναιον.</p></div></article><article class="stage"><img src={upstage} alt="Upstage"/><div><img class="upstageLogo" src={upstageLogo} alt="Upstage"/><p>Ένας πιο ευέλικτος χώρος για ζωντανές παραστάσεις.</p></div></article></div></main></Site>

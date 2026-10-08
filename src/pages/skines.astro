@@ -1,4 +1,11 @@
 ---
-import Site from '../layouts/Site.astro';import {photo,upstage,upstageLogo} from '../lib/assets.js';
+import Site from '../layouts/Site.astro';
+import {photo,upstage,upstageLogo,centralPlan,upstagePlan} from '../lib/assets.js';
 ---
-<Site title="Οι Σκηνές μας"><main class="shell innerPage"><small>02 / OUR STAGES</small><h1>ΟΙ ΣΚΗΝΕΣ ΜΑΣ.</h1><div class="stages"><article class="stage"><img src={photo} alt="Κεντρική Σκηνή"/><div><h3>ΚΕΝΤΡΙΚΗ ΣΚΗΝΗ</h3><p>Η μεγάλη θεατρική αίθουσα του Αθήναιον.</p></div></article><article class="stage"><img src={upstage} alt="Upstage"/><div><img class="upstageLogo" src={upstageLogo} alt="Upstage"/><p>Ένας πιο ευέλικτος χώρος για ζωντανές παραστάσεις.</p></div></article></div></main></Site>
+<Site title="Οι Σκηνές μας"><main class="shell innerPage"><small>02 / OUR STAGES</small><h1>ΟΙ ΣΚΗΝΕΣ ΜΑΣ.</h1><div class="stageDetails">
+<article class="stageDetail"><img class="stageDetailPhoto" src={photo} alt="Κεντρική Σκηνή"/><div class="stageDetailText"><h2>ΚΕΝΤΡΙΚΗ ΣΚΗΝΗ</h2><strong class="capacity">340 ΘΕΣΕΙΣ</strong><p>Η μεγάλη θεατρική αίθουσα του Αθήναιον για ζωντανές παραστάσεις.</p><button type="button" class="planButton" data-plan="central">ΔΕΙΤΕ ΤΗΝ ΚΑΤΟΨΗ ↗</button></div></article>
+<article class="stageDetail"><img class="stageDetailPhoto" src={upstage} alt="Upstage"/><div class="stageDetailText"><img class="upstageDetailLogo" src={upstageLogo} alt="Upstage"/><strong class="capacity">145 ΘΕΣΕΙΣ</strong><p>Μια ευέλικτη, πιο προσωπική σκηνή για παραστάσεις και εκδηλώσεις.</p><button type="button" class="planButton" data-plan="upstage">ΔΕΙΤΕ ΤΗΝ ΚΑΤΟΨΗ ↗</button></div></article>
+</div><dialog id="planDialog" class="planDialog" aria-label="Κάτοψη"><button class="planClose" type="button" aria-label="Κλείσιμο">×</button><img id="planImage" alt="Κάτοψη σκηνής"/></dialog></main>
+<script is:inline>
+(()=>{const dialog=document.getElementById('planDialog');const image=document.getElementById('planImage');const plans={central:"https://admin.videotheatre.gr/api/files/media/fq7y4ko3pgas6wr/gxvri664eg_ro8h41i7j3.png",upstage:"https://admin.videotheatre.gr/api/files/media/8j6clmwj1ea0pmt/l1aq18powi_ug7taod66y.png"};document.querySelectorAll('[data-plan]').forEach(button=>button.addEventListener('click',()=>{image.src=plans[button.dataset.plan];dialog.showModal()}));document.querySelector('.planClose')?.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close()})})();
+</script></Site>

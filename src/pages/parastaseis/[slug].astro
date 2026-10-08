@@ -1,0 +1,9 @@
+---
+import Site from '../../layouts/Site.astro';
+import {shows} from '../../lib/pocketbase.js';
+const lang=Astro.url.pathname.startsWith('/en/')?'en':'el';
+const slug=Astro.params.slug;
+const p=(await shows(lang)).find(x=>x.slug===slug);
+if(!p)return Astro.redirect(lang==='en'?'/en/performances':'/parastaseis',302);
+---
+<Site lang={lang} title={p.title}><main class="shell innerPage"><a class="lineLink" href={lang==='en'?'/en/performances':'/parastaseis'}>← {lang==='en'?'ALL PERFORMANCES':'ΟΛΕΣ ΟΙ ΠΑΡΑΣΤΑΣΕΙΣ'}</a><div class="detailShow">{p.poster&&<img src={p.poster} alt={p.title}/>}<div><small>ATHINAION THEATRE</small><h1>{p.title}</h1></div></div></main></Site>

@@ -36,3 +36,24 @@
 .socialIcon.yt{font-size:11px;border-radius:6px}
 .socials a{display:flex;align-items:center}
 @media(max-width:760px){.top{height:auto;min-height:86px;padding-top:12px;padding-bottom:12px;flex-wrap:wrap}.top nav{order:3;flex-basis:100%;justify-content:flex-start;gap:12px}.top nav a{font-size:10px}.top nav a:nth-child(n+3){display:inline}.innerPage{padding-top:48px;padding-bottom:65px}.contactPage,.detailShow{grid-template-columns:1fr;gap:28px}.floorPlans img{height:auto;max-height:350px}}
+
+/* Stage details, accessible floorplan modal, performance filters */
+.stageDetails{display:grid;gap:45px}
+.stageDetail{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:center;border-top:1px solid #333;padding:42px 0}
+.stageDetailPhoto{width:100%;aspect-ratio:16/10;object-fit:cover}
+.stageDetailText h2{margin:0 0 22px}
+.stageDetailText p{color:#ccc;line-height:1.7;max-width:440px}
+.capacity{display:block;font-size:clamp(1.5rem,2.6vw,2.6rem);letter-spacing:-.03em;margin:20px 0}
+.upstageDetailLogo{max-width:240px;max-height:90px;object-fit:contain}
+.planButton{background:transparent;border:0;border-bottom:1px solid #aaa;padding:10px 0;color:#fff;font-size:12px;font-weight:800;letter-spacing:.08em;cursor:pointer;margin-top:20px}
+.planDialog{background:#111;border:1px solid #555;color:#fff;padding:45px 24px 24px;width:min(1000px,94vw);max-height:92vh;position:fixed}
+.planDialog::backdrop{background:rgba(0,0,0,.88)}
+.planDialog img{width:100%;max-height:75vh;object-fit:contain}
+.planClose{position:absolute;top:4px;right:12px;background:transparent;color:#fff;border:0;font-size:32px;cursor:pointer}
+.stageFilters{display:flex;flex-wrap:wrap;gap:10px;margin:-15px 0 32px}
+.stageFilter{background:transparent;color:#ddd;border:1px solid #555;border-radius:999px;padding:10px 17px;font-size:11px;font-weight:800;cursor:pointer}
+.stageFilter.active,.stageFilter:hover{background:#fff;color:#111;border-color:#fff}
+.showStageTags{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.showStageTags span{font-size:10px;color:#bbb;border:1px solid #444;padding:5px 8px}
+.show[hidden]{display:none!important}
+@media(max-width:760px){.stageDetail{grid-template-columns:1fr;gap:24px;padding:30px 0}.stageFilters{margin-top:0}.stageFilter{padding:9px 12px}}

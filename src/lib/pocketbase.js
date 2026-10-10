@@ -62,6 +62,49 @@ const stageType = (run, spaces) => {
   return null;
 };
 
+const day = (d) => (d ? String(d).slice(0, 10) : '');
+
+// Venue presentations of a production, one per (stage, dates). A copy without a stage is
+// dropped when the same dates also exist with a stage (protects against duplicate runs).
+function presentationsOf(runs, spaces) {
+  const items = runs.map((r) => {
+    const s = spaces.find((x) => x.id === r.space);
+    return {
+      space: s?.name || r.space_name || '',
+      start: day(r.start_date),
+      end: day(r.end_date),
+      ticketingUrl: /^https?:\/\//i.test(r.ticketing_url || '') ? r.ticketing_url.trim() : '',
+    };
+  });
+  const seen = new Map();
+  for (const it of items) {
+    const key = it.space + '|' + it.start + '|' + it.end;
+    if (!seen.has(key)) seen.set(key, it);
+    else if (!seen.get(key).ticketingUrl && it.ticketingUrl) seen.set(key, it);
+  }
+  const unique = [...seen.values()];
+  return unique
+    .filter((it) => it.space || !unique.some((o) => o.space && o.start === it.start && o.end === it.end))
+    .sort((a, b) => a.start.localeCompare(b.start));
+}
+
+// "2026-10-25" -> "25/10/2026"
+export const formatDate = (d) => (d ? d.slice(8, 10) + '/' + d.slice(5, 7) + '/' + d.slice(0, 4) : '');
+
+// YouTube watch/short/embed URL -> embed URL, or null.
+export const youtubeEmbed = (url) => {
+  const m = String(url || '').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  return m ? 'https://www.youtube-nocookie.com/embed/' + m[1] : null;
+};
+
+// Ticket link: production-level URL first (when that field exists), then the first run's URL.
+// Never for completed productions.
+export const ticketUrl = (p) => {
+  if (p.displayStatus === 'past') return '';
+  const own = /^https?:\/\//i.test(p.ticketing_url || '') ? p.ticketing_url.trim() : '';
+  return own || p.presentations.find((x) => x.ticketingUrl)?.ticketingUrl || '';
+};
+
 export async function shows(lang = 'el') {
   const [venues, productions, runs, spaces] = await Promise.all([
     list('venues', { filter: 'editorial_status="published"' }),
@@ -90,12 +133,16 @@ export async function shows(lang = 'el') {
               });
         const associated = venueRuns.filter((r) => r.production === p.id);
         const stageTypes = [...new Set(associated.map((r) => stageType(r, spaces)).filter(Boolean))];
+        const t = tr[0] || {};
         return {
           ...p,
-          title: (lang === 'el' && p.title) || tr[0]?.title || '',
+          title: (lang === 'el' && p.title) || t.title || p.title || '',
+          short_description: (lang !== 'el' && t.short_description) || p.short_description || '',
+          description: (lang !== 'el' && t.description) || p.description || '',
           poster: mediaUrl(p.expand?.poster),
           stageTypes,
           displayStatus: p.display_status || 'now',
+          presentations: presentationsOf(associated, spaces),
         };
       })
   );

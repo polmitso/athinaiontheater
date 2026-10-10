@@ -1,0 +1,55 @@
+---
+import { formatDate, youtubeEmbed, ticketUrl } from '../lib/pocketbase.js';
+const { p, lang = 'el' } = Astro.props;
+const en = lang === 'en';
+const L = en
+  ? { home: 'HOME', all: 'PERFORMANCES', back: '← ALL PERFORMANCES', from: 'FROM', until: 'UNTIL', tickets: 'TICKETS', trailer: 'TRAILER', when: 'DATES & STAGE', status: { now: 'NOW PLAYING', past: 'FINISHED', upcoming: 'COMING SOON' } }
+  : { home: 'ΑΡΧΙΚΗ', all: 'ΠΑΡΑΣΤΑΣΕΙΣ', back: '← ΟΛΕΣ ΟΙ ΠΑΡΑΣΤΑΣΕΙΣ', from: 'ΑΠΟ', until: 'ΕΩΣ', tickets: 'ΕΙΣΙΤΗΡΙΑ', trailer: 'TRAILER', when: 'ΗΜΕΡΟΜΗΝΙΕΣ & ΣΚΗΝΗ', status: { now: 'ΠΑΙΖΕΙ ΤΩΡΑ', past: 'ΟΛΟΚΛΗΡΩΘΗΚΕ', upcoming: 'ΕΡΧΕΤΑΙ' } };
+const listUrl = en ? '/en/performances' : '/parastaseis';
+const homeUrl = en ? '/en' : '/';
+const trailer = youtubeEmbed(p.trailer_url);
+const tickets = ticketUrl(p);
+---
+<main class="shell innerPage showPage">
+  <nav class="crumbs" aria-label="breadcrumb">
+    <a href={homeUrl}>{L.home}</a><span>/</span><a href={listUrl}>{L.all}</a><span>/</span><span aria-current="page">{p.title}</span>
+  </nav>
+
+  <div class="detailShow">
+    {p.poster ? <img src={p.poster} alt={p.title} /> : <div class="posterPlaceholder">ΑΘΗΝΑΙΟΝ</div>}
+    <div class="detailBody">
+      {L.status[p.displayStatus] && <p class={`detailStatus status-${p.displayStatus}`}>{L.status[p.displayStatus]}</p>}
+      <h1>{p.title}</h1>
+      {p.short_description && <p class="detailLead">{p.short_description}</p>}
+
+      {p.presentations.length > 0 && (
+        <section class="detailWhen" aria-label={L.when}>
+          {p.presentations.map((x) => (
+            <div class="whenCard">
+              {x.space && <strong>{x.space.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase()}</strong>}
+              <span>
+                {x.start && `${L.from} ${formatDate(x.start)}`}
+                {x.end && ` · ${L.until} ${formatDate(x.end)}`}
+              </span>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {tickets && <a class="ticketButton" href={tickets} target="_blank" rel="noopener">{L.tickets} ↗</a>}
+
+      {p.description && <div class="richText" set:html={p.description} />}
+    </div>
+  </div>
+
+  {trailer && (
+    <section class="detailTrailer">
+      <small>{L.trailer}</small>
+      <div class="videoFrame">
+        <iframe src={trailer} title={`${p.title} — trailer`} loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+      </div>
+    </section>
+  )}
+
+  <a class="lineLink" href={listUrl}>{L.back}</a>
+</main>

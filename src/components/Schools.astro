@@ -1,0 +1,34 @@
+---
+// Schools page (shared EL/EN). Current productions come from PocketBase like the rest of the site.
+import {shows,formatDate} from '../lib/pocketbase.js';
+const {lang='el'}=Astro.props;
+const en=lang==='en';
+const productions=(await shows(lang)).filter(p=>p.displayStatus!=='past');
+const T=en?{
+  title:'Schools',
+  lead:'Theatre is often a child’s first meeting with art in a real room, together with others. We take that meeting seriously.',
+  body:['We welcome schools to performances on both of our stages, the Main Stage and the Upstage. Many of our productions are made with young audiences in mind, and we are happy to talk with teachers about which one suits their class.','After a performance there is often time for a short conversation with the artists, so that what the pupils saw becomes something they can ask about and discuss.'],
+  how:'How to book',
+  steps:[['Get in touch','By email or phone, whenever suits you.'],['Tell us about your class','The age and number of pupils, and the dates you have in mind.'],['We plan it together','We suggest a performance, a day and a time.']],
+  subject:'School booking at Athinaion Theatre',write:'EMAIL US',call:'Or call us on',now:'On stage now',from:'From',detail:'/en/performances/'
+}:{
+  title:'Σχολεία',
+  lead:'Το θέατρο είναι συχνά η πρώτη συνάντηση ενός παιδιού με την τέχνη σε έναν πραγματικό χώρο, μαζί με άλλους. Αυτή τη συνάντηση την παίρνουμε στα σοβαρά.',
+  body:['Υποδεχόμαστε σχολεία σε παραστάσεις και στις δύο σκηνές μας, την Κεντρική Σκηνή και το Upstage. Πολλές από τις παραγωγές μας φτιάχνονται με σκέψη για το νεανικό κοινό, και συζητάμε ευχαρίστως με τους εκπαιδευτικούς ποια ταιριάζει στην τάξη τους.','Μετά την παράσταση υπάρχει συχνά χρόνος για μια σύντομη κουβέντα με τους συντελεστές, ώστε όσα είδαν οι μαθητές να γίνουν κάτι που ρωτούν και συζητούν.'],
+  how:'Πώς κλείνετε παράσταση',
+  steps:[['Επικοινωνήστε μαζί μας','Με email ή τηλέφωνο, όποτε σας βολεύει.'],['Πείτε μας για την τάξη σας','Ηλικία και αριθμό μαθητών, και τις ημερομηνίες που σας ενδιαφέρουν.'],['Βρίσκουμε μαζί το πρόγραμμα','Σας προτείνουμε παράσταση, ημέρα και ώρα.']],
+  subject:'Σχολική παράσταση στο Θέατρο Αθήναιον',write:'ΣΤΕΙΛΤΕ ΜΑΣ EMAIL',call:'Ή καλέστε μας στο',now:'Τι παίζεται τώρα',from:'Από',detail:'/parastaseis/'
+};
+const mail='mailto:athinaiontheater@gmail.com?subject='+encodeURIComponent(T.subject);
+---
+<main class="shell innerPage schoolsPage">
+  <h1>{T.title}</h1>
+  <p class="pageLead">{T.lead}</p>
+  <div class="schoolsBody">{T.body.map(x=><p>{x}</p>)}</div>
+  <section class="schoolsHow">
+    <h2>{T.how}</h2>
+    <ol class="schoolSteps">{T.steps.map(([h,d],i)=><li><span class="stepN">{i+1}</span><div><h3>{h}</h3><p>{d}</p></div></li>)}</ol>
+    <div class="schoolActions"><a class="btnPrimary" href={mail}>{T.write}</a><p>{T.call} <a href="tel:+306985603020">+30 6985 603020</a></p></div>
+  </section>
+  {productions.length>0&&<section class="schoolsNow"><h2>{T.now}</h2><div class="shows">{productions.slice(0,6).map(p=><a class="show" href={T.detail+p.slug}><div class="poster">{p.poster?<img src={p.poster} alt={p.title} loading="lazy"/>:<span>ΑΘΗΝΑΙΟΝ</span>}</div><h3>{p.title}</h3>{p.presentations[0]?.start&&<span class="showWhen">{T.from} {formatDate(p.presentations[0].start)}</span>}</a>)}</div></section>}
+</main>

@@ -188,3 +188,16 @@ h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
  .sectionHead{flex-wrap:wrap}
  .hireBandInner{gap:24px}
 }
+/* Schools page */
+.schoolsBody{max-width:730px}.schoolsBody p{color:var(--soft);font-size:16px;line-height:1.75;font-weight:300;margin:0 0 18px}
+.schoolsHow{margin-top:clamp(48px,6vw,72px);padding-top:clamp(40px,5vw,56px);border-top:1px solid var(--line)}
+.schoolsHow h2,.schoolsNow h2{margin-bottom:32px}
+.schoolSteps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.schoolSteps li{display:flex;gap:16px;align-items:flex-start}
+.stepN{flex:none;width:38px;height:38px;border:1px solid var(--brass);color:var(--brass);border-radius:50%;display:grid;place-items:center;font-family:'GFS Didot',serif;font-size:18px}
+.schoolSteps h3{margin:6px 0 8px;font-size:18px;font-weight:500;letter-spacing:0}
+.schoolSteps p{margin:0;color:var(--soft);font-size:15px;line-height:1.6;font-weight:300}
+.schoolActions{display:flex;flex-wrap:wrap;align-items:center;gap:24px;margin-top:40px}.schoolActions p{margin:0;color:var(--soft)}.schoolActions p a{color:#fff;border-bottom:1px solid var(--brass)}
+.schoolsNow{margin-top:clamp(56px,7vw,88px);padding-top:clamp(40px,5vw,56px);border-top:1px solid var(--line)}
+@media(max-width:760px){.schoolSteps{grid-template-columns:1fr;gap:22px}}
+.teaserText{max-width:730px;color:var(--soft);font-size:17px;line-height:1.7;font-weight:300;margin:0}

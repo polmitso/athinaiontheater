@@ -91,3 +91,100 @@
 .statusFilter{background:transparent;color:#ddd;border:1px solid #555;border-radius:999px;padding:8px 14px;font-size:10px;font-weight:800;letter-spacing:.04em;cursor:pointer;font-family:inherit}
 .statusFilter.active,.statusFilter:hover{background:#fff;color:#111;border-color:#fff}
 .statusFilters{margin-top:-18px}
+
+/* ================================================================
+   NEW LOOK (10/2026): pure black, GFS Didot headings, Commissioner
+   text, velvet red for the main action, brass for small details.
+   Kept as the last layer so it overrides the rules above.
+   ================================================================ */
+:root{--bg:#000;--panel:#0D0D0D;--card:#161616;--line:#222;--text:#F2F2F2;--soft:#D6D6D6;--muted:#A3A3A3;--red:#8E1F2B;--red-hover:#A2283A;--brass:#C9A46A}
+body{background:var(--bg);color:var(--text);font-family:'Commissioner',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'GFS Didot',Georgia,serif;font-weight:400;letter-spacing:0;text-transform:none}
+h1{font-size:clamp(36px,4.4vw,60px);line-height:1.05;margin:0 0 22px}
+h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
+.top{border-bottom:1px solid var(--line)}
+.top nav{font-size:14px;font-weight:400;letter-spacing:.04em}
+.top nav a:hover,.lineLink:hover{color:var(--brass)}
+.top .navItem.current{border-bottom-color:var(--brass)}
+.top .language{font-weight:500}
+/* Hero */
+.hero{height:clamp(480px,48vw,660px);background:var(--card)}
+.hero:after{background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.55) 45%,rgba(0,0,0,.1) 100%)}
+.heroText{justify-content:flex-end;padding-bottom:clamp(40px,6vw,72px)}
+.heroText h1{max-width:820px}
+.heroText p{max-width:56ch;color:var(--soft);font-size:clamp(16px,1.4vw,19px);font-weight:300;line-height:1.6;margin:0}
+.heroActions{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px}
+.btnPrimary,.btnGhost{display:inline-block;padding:15px 26px;font-size:13px;letter-spacing:.14em;font-weight:500;line-height:1;transition:background .2s,border-color .2s,color .2s}
+.btnPrimary{background:var(--red);color:#fff}
+.btnPrimary:hover{background:var(--red-hover)}
+.btnGhost{border:1px solid #6A6A6A;padding:14px 25px;color:var(--text)}
+.btnGhost:hover{border-color:var(--text)}
+.btnGhost.brass{border-color:var(--brass)}
+.btnGhost.brass:hover{background:var(--brass);color:#000}
+.lineLink{font-size:14px;font-weight:400;letter-spacing:.04em;border-bottom:1px solid #444;padding-bottom:6px}
+/* Sections */
+.section{padding:clamp(56px,8vw,104px) 0;border-top:1px solid var(--line)}
+.sectionHead{align-items:flex-end;margin-bottom:40px}
+.shows{gap:clamp(18px,2.6vw,36px)}
+.poster{aspect-ratio:5/7;background:var(--card)}
+.poster span{color:#555;font-family:'GFS Didot',serif;letter-spacing:.1em}
+.showStage{display:block;margin-top:16px;font-size:11px;letter-spacing:.22em;color:var(--brass);min-height:1em}
+.show h3{font-size:clamp(18px,1.6vw,22px);line-height:1.25;margin:8px 0 6px}
+.showWhen{font-size:14px;color:var(--muted)}
+.show:hover h3{color:var(--brass)}
+.empty{color:var(--muted);font-size:17px;line-height:1.6}
+.stage{min-height:360px;background:var(--card)}
+.stage h3{font-size:clamp(24px,2.4vw,30px);margin:0 0 8px}
+.stage p{color:var(--soft);font-size:15px;font-weight:300}
+.upstageLogo{margin:0 0 10px}
+/* Hire band (home) */
+.hireBand{background:var(--panel);border-top:1px solid var(--line)}
+.hireBandInner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:32px;padding:clamp(56px,7vw,88px) 0}
+.hireBandInner>div{max-width:680px}
+.hireBandInner h2{margin-bottom:16px}
+.hireBandInner p{color:var(--soft);font-size:16px;line-height:1.65;font-weight:300;margin:0}
+/* Inner pages */
+.innerPage{padding-top:clamp(48px,6vw,80px)}
+.innerPage h1{margin:0 0 40px}
+.pageLead{color:var(--soft);font-weight:300}
+.stageDetail{border-top:1px solid var(--line)}
+.stageDetailText h2{margin:0 0 14px}
+.capacity{font-family:'Commissioner',sans-serif;font-size:13px;letter-spacing:.14em;color:var(--muted);font-weight:500;margin:0 0 18px}
+.stageDetailText p{color:var(--soft);font-weight:300}
+.planButton{font-family:inherit;font-weight:500;color:var(--text);border-bottom-color:#444}
+.planButton:hover{color:var(--brass)}
+.floorPlans figure{background:var(--panel);border-color:var(--line)}
+.contactPage h2{font-size:clamp(26px,2.4vw,34px)}
+.contactPage p{color:var(--soft)}
+/* Filters */
+.stageFilters{margin:0 0 14px;gap:8px}
+.statusFilters{margin:0 0 36px}
+.stageFilter,.statusFilter{font-family:inherit;border-radius:0;border:1px solid #444;background:transparent;color:var(--text);font-weight:500;letter-spacing:.12em;font-size:12px;padding:11px 18px}
+.statusFilter{font-size:11px;padding:9px 15px}
+.stageFilter.active,.stageFilter:hover,.statusFilter.active,.statusFilter:hover{background:var(--text);color:#000;border-color:var(--text)}
+.statusText{display:block;margin-top:4px;font-size:13px;color:var(--muted)}
+.showStageTags span{border-color:#333;color:var(--brass);letter-spacing:.14em}
+/* Production detail */
+.showPage .crumbs{font-weight:400;letter-spacing:.04em;font-size:13px;color:#777}
+.showPage .crumbs a{color:var(--muted)}
+.detailStatus{font-weight:500;letter-spacing:.16em;font-size:12px}
+.detailStatus.status-now{color:var(--text)}
+.detailStatus.status-upcoming{color:var(--brass)}
+.detailStatus.status-past{color:var(--muted)}
+.detailLead{color:var(--soft);font-weight:300}
+.whenCard{border-top-color:var(--line)}
+.whenCard strong{font-weight:500;color:var(--brass)}
+.ticketButton{background:var(--red);color:#fff;font-weight:500}
+.ticketButton:hover{background:var(--red-hover)}
+.richText{color:var(--soft);font-weight:300}
+.posterPlaceholder{background:var(--card);font-family:'GFS Didot',serif;font-weight:400}
+/* Footer */
+.footer{background:var(--panel);border-top:1px solid var(--line);color:var(--muted)}
+.contactInfo a:hover,.socials a:hover{color:var(--brass);text-decoration:none}
+@media(max-width:760px){
+ .hero{height:560px}
+ .heroText h1{font-size:36px}
+ .btnPrimary,.btnGhost{padding:14px 20px}
+ .sectionHead{flex-wrap:wrap}
+ .hireBandInner{gap:24px}
+}

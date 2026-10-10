@@ -167,6 +167,38 @@ export async function shows(lang = 'el') {
   return result.filter((p) => p.title);
 }
 
+// Homepage hero slides, chosen in Work (collection hero_slides, site="athinaion").
+// Fallback when none are set: current productions at Athinaion with a hero image, else the theatre photo.
+// Returns [{image, title, href, status}] — at most 5.
+export async function heroSlides(lang, productions, fallbackImage) {
+  const prefix = lang === 'en' ? '/en/performances/' : '/parastaseis/';
+  const fromShow = (p) => (p ? { title: p.title, href: prefix + p.slug, status: p.displayStatus } : {});
+  let rows = [];
+  try {
+    const qs = new URLSearchParams({ filter: 'site="athinaion" && active=true', sort: 'sort,created', expand: 'image', perPage: '10' });
+    const res = await fetch(SERVER_BASE + '/api/collections/hero_slides/records?' + qs, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+    if (res.status === 404) console.warn('[pocketbase] hero_slides collection not created yet; using automatic hero');
+    else if (!res.ok) recordError(`hero_slides: HTTP ${res.status}`);
+    else rows = (await res.json()).items || [];
+  } catch (e) {
+    recordError(`hero_slides: ${e?.message || e}`);
+  }
+  const chosen = rows
+    .map((r) => {
+      const p = productions.find((x) => x.id === r.production);
+      const base = fromShow(p);
+      const caption = (lang === 'en' ? r.caption_en : r.caption) || r.caption;
+      return { image: mediaUrl(r.expand?.image), title: caption || base.title || '', href: r.link || base.href || '', status: caption && !p ? '' : base.status || '' };
+    })
+    .filter((x) => x.image);
+  if (chosen.length) return chosen.slice(0, 5);
+  const auto = productions
+    .filter((p) => p.displayStatus !== 'past' && p.expand?.hero_image)
+    .slice(0, 5)
+    .map((p) => ({ image: mediaUrl(p.expand.hero_image), ...fromShow(p) }));
+  return auto.length ? auto : fallbackImage ? [{ image: fallbackImage, title: '', href: '', status: '' }] : [];
+}
+
 // Small diagnostic used by /health.json — counts only, no record contents, no secrets.
 export async function health() {
   lastErrors.length = 0;

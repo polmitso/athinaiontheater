@@ -1,0 +1,35 @@
+---
+// Rotating hero (2–5 photos). part="images": the photos (behind the shade).
+// part="captions": title/status of the current photo + dots + the rotation script.
+const { slides = [], labels = {}, lang = 'el', part = 'images' } = Astro.props;
+const slideLabel = lang === 'en' ? 'Photo' : 'Φωτογραφία';
+---
+{part === 'images' && slides.map((s, i) => (
+  <div class:list={['hs-slide', { active: i === 0 }]}><img src={s.image} alt="" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'}/></div>
+))}
+{part === 'captions' && (slides.some((s) => s.title) || slides.length > 1) && (
+  <div class="hs-bar">
+    {slides.map((s, i) => {
+      const Tag = s.href ? 'a' : 'div';
+      return <Tag class:list={['hs-caption', { active: i === 0 }]} href={s.href || undefined} aria-hidden={i !== 0 ? 'true' : undefined} tabindex={s.href && i !== 0 ? -1 : undefined}>{s.status && <span class:list={['status', s.status]}>{labels[s.status]}</span>}{s.title && <span class="hs-title">{s.title}{s.href && ' →'}</span>}</Tag>;
+    })}
+    {slides.length > 1 && <div class="hs-dots">{slides.map((_, i) => <button type="button" class:list={['hs-dot', { active: i === 0 }]} data-hs-to={i} aria-label={`${slideLabel} ${i + 1}`}></button>)}</div>}
+  </div>
+)}
+{part === 'captions' && slides.length > 1 && (
+  <script is:inline>
+    (() => {
+      const slides = [...document.querySelectorAll('.hs-slide')], caps = [...document.querySelectorAll('.hs-caption')], dots = [...document.querySelectorAll('[data-hs-to]')];
+      let index = 0, timer;
+      const show = (n) => {
+        index = (n + slides.length) % slides.length;
+        slides.forEach((s, i) => s.classList.toggle('active', i === index));
+        caps.forEach((c, i) => { const on = i === index; c.classList.toggle('active', on); if (on) { c.removeAttribute('aria-hidden'); c.removeAttribute('tabindex'); } else { c.setAttribute('aria-hidden', 'true'); if (c.tagName === 'A') c.setAttribute('tabindex', '-1'); } });
+        dots.forEach((d, i) => d.classList.toggle('active', i === index));
+      };
+      const schedule = () => { clearInterval(timer); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => { if (!document.hidden) show(index + 1); }, 6000); };
+      dots.forEach((d) => d.addEventListener('click', () => { show(Number(d.dataset.hsTo)); schedule(); }));
+      schedule();
+    })();
+  </script>
+)}

@@ -86,3 +86,8 @@
 .videoFrame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .showPage>.lineLink{margin-top:60px}
 @media(max-width:760px){.detailBody h1{margin:6px 0 16px}.detailTrailer{margin-top:45px}.ticketButton{display:block;text-align:center}}
+
+/* Status filters: same look as stage filters, a little smaller */
+.statusFilter{background:transparent;color:#ddd;border:1px solid #555;border-radius:999px;padding:8px 14px;font-size:10px;font-weight:800;letter-spacing:.04em;cursor:pointer;font-family:inherit}
+.statusFilter.active,.statusFilter:hover{background:#fff;color:#111;border-color:#fff}
+.statusFilters{margin-top:-18px}

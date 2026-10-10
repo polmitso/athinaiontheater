@@ -47,6 +47,24 @@ export async function list(collection, params = {}) {
   }
 }
 
+// Resolve a media record ID to its current public file URL (cached for 5 minutes).
+const mediaCache = new Map();
+export async function mediaById(id) {
+  const hit = mediaCache.get(id);
+  if (hit && hit.expires > Date.now()) return hit.url;
+  try {
+    const res = await fetch(SERVER_BASE + '/api/collections/media/records/' + id, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+    if (!res.ok) { recordError(`media ${id}: HTTP ${res.status}`); return hit?.url || null; }
+    const r = await res.json();
+    const url = mediaUrl(r);
+    mediaCache.set(id, { url, expires: Date.now() + 5 * 60 * 1000 });
+    return url;
+  } catch (e) {
+    recordError(`media ${id}: ${e?.message || e}`);
+    return hit?.url || null;
+  }
+}
+
 export const mediaUrl = (r) => (r?.id && r?.file ? PUBLIC_BASE + '/api/files/media/' + r.id + '/' + r.file : null);
 
 const findVenue = (venues) =>
@@ -146,7 +164,7 @@ export async function shows(lang = 'el') {
         };
       })
   );
-  return result.filter((p) => p.title).slice(0, 6);
+  return result.filter((p) => p.title);
 }
 
 // Small diagnostic used by /health.json — counts only, no record contents, no secrets.

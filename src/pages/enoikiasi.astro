@@ -1,4 +1,4 @@
 ---
-import Site from '../layouts/Site.astro';import {centralPlan,upstagePlan} from '../lib/assets.js';
+import Site from '../layouts/Site.astro';import {assets} from '../lib/assets.js';const {centralPlan,upstagePlan}=await assets();
 ---
 <Site title="Ενοικίαση"><main class="shell innerPage"><h1>Ενοικίαση</h1><p class="pageLead">Η Κεντρική Σκηνή και το Upstage είναι ανοιχτά σε θιάσους, δημιουργούς και οργανισμούς που ψάχνουν σπίτι για τη δουλειά τους. Μιλήστε μας για την ιδέα σας και θα δούμε μαζί πώς μπορεί να σταθεί στη σκηνή μας.</p><div class="floorPlans"><figure><img src={centralPlan} alt="Κάτοψη Κεντρικής Σκηνής"/><figcaption>ΚΕΝΤΡΙΚΗ ΣΚΗΝΗ · ΚΑΤΟΨΗ</figcaption></figure><figure><img src={upstagePlan} alt="Κάτοψη Upstage"/><figcaption>UPSTAGE · ΚΑΤΟΨΗ</figcaption></figure></div><a class="lineLink" href="/epikoinonia">ΜΙΛΗΣΤΕ ΜΑΣ →</a></main></Site>

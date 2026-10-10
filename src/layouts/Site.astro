@@ -4,7 +4,8 @@ const en=lang==='en';
 const path=Astro.url.pathname;
 const pairs=[['/','/en'],['/parastaseis','/en/performances'],['/skines','/en/stages'],['/enoikiasi','/en/venue-hire'],['/epikoinonia','/en/contact']];
 const pair=pairs.find(x=>x.includes(path.replace(/\/$/,'')||'/'))||pairs[0];
-const logo='https://admin.videotheatre.gr/api/files/media/29nn36f40ai14fd/athinaion_logo_web_white_transparent_cts3spf9y7.png';
+import {assets} from '../lib/assets.js';
+const {logo}=await assets();
 const menu=en?[['/en/performances','What’s on'],['/en/stages','Our stages'],['/en/venue-hire','Venue hire'],['/en/contact','Contact']]:[['/parastaseis','Τι παίζεται'],['/skines','Οι σκηνές'],['/enoikiasi','Ενοικίαση'],['/epikoinonia','Επικοινωνία']];
 ---
 <!doctype html><html lang={lang}><head><meta charset="utf-8"/><link rel="icon" type="image/png" href="/favicon.png"/><link rel="apple-touch-icon" href="/favicon.png"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content={en?'Athinaion Theatre in Thessaloniki — performances, stages, venue hire and contact.':'Θέατρο Αθήναιον Θεσσαλονίκη — παραστάσεις, σκηνές, ενοικίαση και επικοινωνία.'}/><title>{title} | Αθήναιον</title><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600&family=GFS+Didot&display=swap"/><link rel="stylesheet" href="/style.css"/><link rel="alternate" hreflang="el" href={pair[0]}/><link rel="alternate" hreflang="en" href={pair[1]}/></head><body>

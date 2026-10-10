@@ -126,7 +126,7 @@ export const ticketUrl = (p) => {
 export async function shows(lang = 'el') {
   const [venues, productions, runs, spaces] = await Promise.all([
     list('venues', { filter: 'editorial_status="published"' }),
-    list('productions', { filter: 'editorial_status="published"', expand: 'poster,hero_image' }),
+    list('productions', { filter: 'editorial_status="published"', expand: 'poster,hero_image,gallery' }),
     list('runs'),
     list('spaces'),
   ]);
@@ -158,6 +158,7 @@ export async function shows(lang = 'el') {
           short_description: (lang !== 'el' && t.short_description) || p.short_description || '',
           description: (lang !== 'el' && t.description) || p.description || '',
           poster: mediaUrl(p.expand?.poster),
+          gallery: (p.expand?.gallery || []).map((m) => ({ src: mediaUrl(m), alt: m.title || '' })).filter((g) => g.src),
           stageTypes,
           displayStatus: p.display_status || 'now',
           presentations: presentationsOf(associated, spaces),

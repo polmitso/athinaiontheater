@@ -1,4 +1,5 @@
 ---
+import Gallery from './Gallery.astro';
 import { formatDate, youtubeEmbed, ticketUrl } from '../lib/pocketbase.js';
 const { p, lang = 'el' } = Astro.props;
 const en = lang === 'en';
@@ -41,6 +42,8 @@ const tickets = ticketUrl(p);
       {p.description && <div class="richText" set:html={p.description} />}
     </div>
   </div>
+
+  <Gallery images={p.gallery} lang={lang}/>
 
   {trailer && (
     <section class="detailTrailer">

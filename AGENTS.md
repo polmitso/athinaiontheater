@@ -12,6 +12,10 @@
 - Σελίδα λεπτομερειών: `src/components/ShowDetail.astro` (κοινή για EL/EN).
 - Έλεγχος: `/health.json` πρέπει να δείχνει `"ok": true`.
 - Προαιρετικές μεταβλητές: `POCKETBASE_INTERNAL_URL`, `ATHINAION_VENUE_ID`, `ATHINAION_VENUE_SLUG`.
+- Σελίδες: Τι παίζει (`/parastaseis`), Οι σκηνές, **Σχολεία** (`src/components/Schools.astro`), Ενοικίαση, Επικοινωνία — EL/EN.
+- Λογότυπο/φωτογραφίες με media record ID: `src/lib/assets.js`.
+- Hero αρχικής: `heroSlides()` + `src/components/HeroSlides.astro` (από Work → Hero αρχικής, site `athinaion`). Gallery: `src/components/Gallery.astro`.
+- Umami script στο `src/layouts/Site.astro`. Domain: https://athinaiontheater.gr
 
 ## Κανόνες εργασίας
 - Branch → `npm run build` → έλεγχος diff → merge στο `main` ως ένα πακέτο.

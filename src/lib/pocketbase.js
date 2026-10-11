@@ -136,7 +136,10 @@ export async function shows(lang = 'el') {
     return [];
   }
   const venueRuns = runs.filter((r) => r.venue === venue.id);
-  const ids = new Set(venueRuns.map((r) => r.production));
+  // Shown here if chosen in Work (show_on includes athinaion), or — when nothing is chosen — if it has a «Πού & πότε» at Athinaion.
+  const withRun = new Set(venueRuns.map((r) => r.production));
+  const explicit = (p) => Array.isArray(p.show_on) && p.show_on.length > 0;
+  const ids = new Set(productions.filter((p) => (explicit(p) ? p.show_on.includes('athinaion') : withRun.has(p.id))).map((p) => p.id));
 
   const result = await Promise.all(
     productions
@@ -165,7 +168,13 @@ export async function shows(lang = 'el') {
         };
       })
   );
-  return result.filter((p) => p.title);
+  // Order: priority from Work (higher first), then now → upcoming (soonest) → finished (latest first).
+  const rank = { now: 0, upcoming: 1, past: 2 };
+  const startOf = (p) => (p.upcoming_date ? String(p.upcoming_date).slice(0, 10) : p.presentations[0]?.start || '');
+  return result.filter((p) => p.title).sort((a, b) =>
+    (Number(b.priority) || 0) - (Number(a.priority) || 0) ||
+    (rank[a.displayStatus] ?? 0) - (rank[b.displayStatus] ?? 0) ||
+    (a.displayStatus === 'past' ? startOf(b).localeCompare(startOf(a)) : startOf(a).localeCompare(startOf(b))));
 }
 
 // Homepage hero slides, chosen in Work (collection hero_slides, site="athinaion").

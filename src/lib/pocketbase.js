@@ -123,6 +123,17 @@ export const ticketUrl = (p) => {
   return own || p.presentations.find((x) => x.ticketingUrl)?.ticketingUrl || '';
 };
 
+// Today in Athens (YYYY-MM-DD).
+function todayAthens() {
+  const x = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Athens', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).map((p) => [p.type, p.value]));
+  return `${x.year}-${x.month}-${x.day}`;
+}
+// Finished HERE: it had «Πού & πότε» at Athinaion and every one of them has ended — even if the production now plays elsewhere.
+function finishedHere(runs) {
+  const today = todayAthens();
+  return runs.length > 0 && runs.every((r) => r.end_date && String(r.end_date).slice(0, 10) < today);
+}
+
 export async function shows(lang = 'el') {
   const [venues, productions, runs, spaces] = await Promise.all([
     list('venues', { filter: 'editorial_status="published"' }),
@@ -163,7 +174,7 @@ export async function shows(lang = 'el') {
           poster: mediaUrl(p.expand?.poster),
           gallery: (p.expand?.gallery || []).map((m) => ({ src: mediaUrl(m), alt: m.title || '' })).filter((g) => g.src),
           stageTypes,
-          displayStatus: p.display_status || 'now',
+          displayStatus: finishedHere(associated) ? 'past' : p.display_status || 'now',
           presentations: presentationsOf(associated, spaces),
         };
       })

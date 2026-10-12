@@ -1,0 +1,64 @@
+---
+// Newsletter sign-up (same component on all three sites). Posts to videotheatre.gr, which talks to Brevo.
+// Double opt-in: the visitor gets a confirmation email; only confirmed addresses join the list.
+const { site, lang = 'el', wrap = '' } = Astro.props;
+const en = lang === 'en';
+const api = (import.meta.env.PUBLIC_NEWSLETTER_API || 'https://videotheatre.gr/api/newsletter') + '/subscribe';
+const T = en
+  ? { title: 'Newsletter', lead: 'New productions, premieres and exhibitions — a few emails a year, nothing more.', ph: 'Your email', btn: 'Sign up', consent: 'I agree to receive news by email. I can unsubscribe at any time.', ok: 'Almost done — check your inbox and confirm with the link we just sent you.', err: 'Something went wrong. Please try again.' }
+  : { title: 'Newsletter', lead: 'Νέες παραγωγές, πρεμιέρες και εκθέσεις — λίγα emails τον χρόνο, τίποτα παραπάνω.', ph: 'Το email σου', btn: 'Εγγραφή', consent: 'Συμφωνώ να λαμβάνω νέα με email. Μπορώ να διαγραφώ όποτε θέλω.', ok: 'Σχεδόν έτοιμο — δες τα εισερχόμενά σου και επιβεβαίωσε με τον σύνδεσμο που σου στείλαμε.', err: 'Κάτι πήγε στραβά. Δοκίμασε ξανά.' };
+---
+<section class="nl-band" aria-labelledby="nl-title">
+  <div class={wrap + ' nl-inner'}>
+    <div class="nl-copy"><h2 id="nl-title">{T.title}</h2><p>{T.lead}</p></div>
+    <form class="nl-form" data-api={api} data-site={site} data-lang={lang} data-ok={T.ok} data-err={T.err} novalidate>
+      <div class="nl-row">
+        <label class="nl-sr" for="nl-email">{T.ph}</label>
+        <input id="nl-email" name="email" type="email" autocomplete="email" required placeholder={T.ph}/>
+        <button type="submit">{T.btn}</button>
+      </div>
+      <label class="nl-consent"><input type="checkbox" name="consent" required/><span>{T.consent}</span></label>
+      <input class="nl-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"/>
+      <p class="nl-msg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+<style>
+  .nl-band{border-top:1px solid rgba(255,255,255,.12);padding:56px 0}
+  .nl-inner{display:flex;flex-wrap:wrap;gap:24px 48px;align-items:flex-start;justify-content:space-between}
+  .nl-copy{flex:1 1 280px;max-width:460px}
+  .nl-copy h2{margin:0 0 8px;font-size:clamp(24px,3vw,32px);line-height:1.15}
+  .nl-copy p{margin:0;opacity:.75;line-height:1.6}
+  .nl-form{flex:1 1 340px;max-width:520px;display:flex;flex-direction:column;gap:12px}
+  .nl-row{display:flex;gap:10px;flex-wrap:wrap}
+  .nl-row input{flex:1 1 220px;min-width:0;min-height:50px;padding:0 16px;font:inherit;font-size:16px;color:inherit;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.22);border-radius:6px}
+  .nl-row input:focus{outline:2px solid currentColor;outline-offset:1px}
+  .nl-row button{min-height:50px;padding:0 26px;font:inherit;font-weight:600;font-size:16px;color:#000;background:#fff;border:0;border-radius:6px;cursor:pointer}
+  .nl-row button:disabled{opacity:.6;cursor:wait}
+  .nl-consent{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;opacity:.8;cursor:pointer}
+  .nl-consent input{width:18px;height:18px;margin:2px 0 0;flex:none;accent-color:#fff}
+  .nl-msg{margin:0;min-height:1.5em;font-size:15px;line-height:1.5}
+  .nl-msg.err{color:#ff8a8a}
+  .nl-sr,.nl-hp{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+<script>
+  for (const form of document.querySelectorAll('.nl-form')) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.currentTarget, msg = f.querySelector('.nl-msg'), btn = f.querySelector('button');
+      const email = f.email.value.trim();
+      msg.className = 'nl-msg';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { msg.textContent = f.dataset.lang === 'en' ? 'Please enter a valid email.' : 'Γράψε ένα σωστό email.'; msg.classList.add('err'); f.email.focus(); return; }
+      if (!f.consent.checked) { msg.textContent = f.dataset.lang === 'en' ? 'Please tick the box to agree.' : 'Τσέκαρε το κουτάκι για να συμφωνήσεις.'; msg.classList.add('err'); return; }
+      btn.disabled = true;
+      try {
+        const res = await fetch(f.dataset.api, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email, consent: true, site: f.dataset.site, lang: f.dataset.lang, website: f.website.value }) });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || f.dataset.err);
+        msg.textContent = f.dataset.ok; f.reset();
+        try { window.umami?.track('Newsletter εγγραφή', { site: f.dataset.site }); } catch {}
+      } catch (err) { msg.textContent = err.message || f.dataset.err; msg.classList.add('err'); }
+      finally { btn.disabled = false; }
+    });
+  }
+</script>

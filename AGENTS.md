@@ -16,6 +16,7 @@
 - Λογότυπο/φωτογραφίες με media record ID: `src/lib/assets.js`.
 - Hero αρχικής: `heroSlides()` + `src/components/HeroSlides.astro` (από Work → Hero αρχικής, site `athinaion`). Gallery: `src/components/Gallery.astro`.
 - Umami script στο `src/layouts/Site.astro`. Domain: https://athinaiontheater.gr
+- Newsletter: φόρμα `src/components/Newsletter.astro` (ίδια στα 3 sites, στέλνει στο videotheatre.gr/api/newsletter), επιβεβαίωση `/newsletter-ok`.
 
 ## Κανόνες εργασίας
 - Branch → `npm run build` → έλεγχος diff → merge στο `main` ως ένα πακέτο.

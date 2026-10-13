@@ -20,7 +20,7 @@
 
 ## Κανόνες εργασίας
 - Branch → `npm run build` → έλεγχος diff → merge στο `main` ως ένα πακέτο.
-- Το Coolify δεν κάνει αυτόματο deploy: μετά το merge, Deploy στο Coolify και έλεγχος live.
+- Το Coolify κάνει **αυτόματο deploy** (webhook) σε κάθε push στο `main`: merge στο main = live σε λίγα λεπτά. Γι' αυτό merge μόνο ό,τι έχει περάσει build και έλεγχο· μετά έλεγχος live.
 - Κανένα μυστικό σε κώδικα ή docs. Μην αγγίζεις άλλα repos/εφαρμογές χωρίς λόγο.
 - Μην κρύβεις σφάλματα του PocketBase επιστρέφοντας σιωπηλά κενά δεδομένα.
 - Μετά από κάθε ολοκληρωμένη δουλειά, ενημέρωσε το `docs/04-STATUS.md` στο videotheatre-work.

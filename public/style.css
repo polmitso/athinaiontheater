@@ -276,3 +276,4 @@ h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
 @media(max-width:960px){.sp-grid{grid-template-columns:1fr}.sp-side{position:static;order:-1;grid-template-columns:minmax(0,200px) 1fr;align-items:start}}
 @media(max-width:600px){.sp-side{grid-template-columns:1fr}.sp-poster{display:none}.sp-credits div{grid-template-columns:1fr;gap:2px}.sp-hero .heroActions a{flex:1 1 100%;text-align:center}}
 .sp-hero .crumbs a{display:inline!important}
+.sp-hero-img { object-position: center top; }

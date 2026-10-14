@@ -1,57 +1,111 @@
 ---
+// Production page (EL/EN). Layout: hero (image, title, tickets) → main column (about, credits, cast, trailer, photos)
+// beside a sticky info box (when, duration, ages, prices, tickets, where). Optional fields from Work are shown only
+// when filled in: credits, cast, duration, ages, prices (one entry per line).
 import Gallery from './Gallery.astro';
-import { formatDate, youtubeEmbed, ticketUrl } from '../lib/pocketbase.js';
+import { formatDate, youtubeEmbed, ticketUrl, lines, credits } from '../lib/pocketbase.js';
 const { p, lang = 'el' } = Astro.props;
 const en = lang === 'en';
 const L = en
-  ? { home: 'HOME', all: 'PERFORMANCES', back: '← ALL PERFORMANCES', from: 'FROM', until: 'UNTIL', tickets: 'TICKETS', trailer: 'TRAILER', when: 'DATES & STAGE', status: { now: 'NOW PLAYING', past: 'FINISHED', upcoming: 'COMING SOON' } }
-  : { home: 'ΑΡΧΙΚΗ', all: 'ΠΑΡΑΣΤΑΣΕΙΣ', back: '← ΟΛΕΣ ΟΙ ΠΑΡΑΣΤΑΣΕΙΣ', from: 'ΑΠΟ', until: 'ΕΩΣ', tickets: 'ΕΙΣΙΤΗΡΙΑ', trailer: 'TRAILER', when: 'ΗΜΕΡΟΜΗΝΙΕΣ & ΣΚΗΝΗ', status: { now: 'ΠΑΙΖΕΙ ΤΩΡΑ', past: 'ΟΛΟΚΛΗΡΩΘΗΚΕ', upcoming: 'ΕΡΧΕΤΑΙ' } };
+  ? { home: 'HOME', all: 'PERFORMANCES', back: '← ALL PERFORMANCES', from: 'From', until: 'until', tickets: 'TICKETS', trailer: 'Trailer', watch: 'WATCH THE TRAILER',
+      about: 'About the show', credits: 'Credits', cast: 'Cast', photos: 'Photos', when: 'Dates', duration: 'Running time', ages: 'Suitable for', prices: 'Tickets', where: 'Venue', map: 'Map',
+      status: { now: 'NOW PLAYING', past: 'FINISHED', upcoming: 'COMING SOON' } }
+  : { home: 'ΑΡΧΙΚΗ', all: 'ΠΑΡΑΣΤΑΣΕΙΣ', back: '← ΟΛΕΣ ΟΙ ΠΑΡΑΣΤΑΣΕΙΣ', from: 'Από', until: 'έως', tickets: 'ΕΙΣΙΤΗΡΙΑ', trailer: 'Trailer', watch: 'ΔΕΙΤΕ ΤΟ TRAILER',
+      about: 'Λίγα λόγια', credits: 'Ταυτότητα παράστασης', cast: 'Παίζουν', photos: 'Υλικό παράστασης', when: 'Πότε', duration: 'Διάρκεια', ages: 'Ηλικίες', prices: 'Εισιτήρια', where: 'Πού', map: 'Χάρτης',
+      status: { now: 'ΠΑΙΖΕΙ ΤΩΡΑ', past: 'ΟΛΟΚΛΗΡΩΘΗΚΕ', upcoming: 'ΕΡΧΕΤΑΙ' } };
 const listUrl = en ? '/en/performances' : '/parastaseis';
 const homeUrl = en ? '/en' : '/';
 const trailer = youtubeEmbed(p.trailer_url);
 const tickets = ticketUrl(p);
+const crew = credits(p.credits);
+const cast = lines(p.cast).join(', ');
+const prices = lines(p.prices);
+const heroImg = p.hero || p.gallery?.[0]?.src || '';
+const upper = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
+const v = p.venue || {};
+const mapQ = encodeURIComponent([v.name, v.address, 'Αθήνα'].filter(Boolean).join(', '));
 ---
-<main class="shell innerPage showPage">
-  <nav class="crumbs" aria-label="breadcrumb">
-    <a href={homeUrl}>{L.home}</a><span>/</span><a href={listUrl}>{L.all}</a><span>/</span><span aria-current="page">{p.title}</span>
-  </nav>
-
-  <div class="detailShow">
-    {p.poster ? <img src={p.poster} alt={p.title} /> : <div class="posterPlaceholder">ΑΘΗΝΑΙΟΝ</div>}
-    <div class="detailBody">
+<main class="showPage sp">
+  <header class:list={['sp-hero', { 'has-img': heroImg }]}>
+    {heroImg && <img class="sp-hero-img" src={heroImg + '?thumb=1920x0'} alt="" />}
+    <div class="shell sp-hero-in">
+      <nav class="crumbs" aria-label="breadcrumb">
+        <a href={homeUrl}>{L.home}</a><span>/</span><a href={listUrl}>{L.all}</a><span>/</span><span aria-current="page">{p.title}</span>
+      </nav>
       {L.status[p.displayStatus] && <p class={`detailStatus status-${p.displayStatus}`}>{L.status[p.displayStatus]}</p>}
       <h1>{p.title}</h1>
-      {p.short_description && <p class="detailLead">{p.short_description}</p>}
+      {p.short_description && <p class="sp-lead">{p.short_description}</p>}
+      <div class="heroActions">
+        {tickets && <a class="btnPrimary" href={tickets} target="_blank" rel="noopener">{L.tickets} ↗</a>}
+        {trailer && <a class="btnGhost" href="#trailer">▶ {L.watch}</a>}
+      </div>
+    </div>
+  </header>
 
-      {p.presentations.length > 0 && (
-        <section class="detailWhen" aria-label={L.when}>
-          {p.presentations.map((x) => (
-            <div class="whenCard">
-              {x.space && <strong>{x.space.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase()}</strong>}
-              <span>
-                {x.start && `${L.from} ${formatDate(x.start)}`}
-                {x.end && ` · ${L.until} ${formatDate(x.end)}`}
-              </span>
-            </div>
-          ))}
+  <div class="shell sp-grid">
+    <div class="sp-main">
+      {p.description && (
+        <section class="sp-sec">
+          <h2>{L.about}</h2>
+          <div class="richText" set:html={p.description} />
         </section>
       )}
 
-      {tickets && <a class="ticketButton" href={tickets} target="_blank" rel="noopener">{L.tickets} ↗</a>}
+      {(crew.length > 0 || cast) && (
+        <section class="sp-sec">
+          <h2>{L.credits}</h2>
+          {crew.length > 0 && <dl class="sp-credits">{crew.map((c) => <div><dt>{c.role}</dt><dd>{c.names}</dd></div>)}</dl>}
+          {cast && <div class="sp-cast"><h3>{L.cast}</h3><p>{cast}</p></div>}
+        </section>
+      )}
 
-      {p.description && <div class="richText" set:html={p.description} />}
+      {trailer && (
+        <section class="sp-sec" id="trailer">
+          <h2>{L.trailer}</h2>
+          <div class="videoFrame">
+            <iframe src={trailer} title={`${p.title} — trailer`} loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+          </div>
+        </section>
+      )}
+
+      <Gallery images={p.gallery} lang={lang} title={L.photos}/>
     </div>
+
+    <aside class="sp-side">
+      {p.poster && <img class="sp-poster" src={p.poster + '?thumb=800x0'} alt={p.title} />}
+      <div class="sp-info">
+        {p.presentations.length > 0 && (
+          <div class="sp-row">
+            <h3>{L.when}</h3>
+            {p.presentations.map((x) => (
+              <div class="sp-when">
+                {x.space && <strong>{upper(x.space)}</strong>}
+                {(x.start || x.end) && <span>{x.start && `${L.from} ${formatDate(x.start)}`}{x.end && ` ${L.until} ${formatDate(x.end)}`}</span>}
+                {x.hours && <span class="sp-hours">{x.hours}</span>}
+              </div>
+            ))}
+          </div>
+        )}
+        {p.duration && <div class="sp-row"><h3>{L.duration}</h3><p>{p.duration}</p></div>}
+        {p.ages && <div class="sp-row"><h3>{L.ages}</h3><p>{p.ages}</p></div>}
+        {(prices.length > 0 || tickets) && (
+          <div class="sp-row">
+            <h3>{L.prices}</h3>
+            {prices.length > 0 && <ul class="sp-prices">{prices.map((x) => <li>{x}</li>)}</ul>}
+            {tickets && <a class="btnPrimary sp-btn" href={tickets} target="_blank" rel="noopener">{L.tickets} ↗</a>}
+          </div>
+        )}
+        <div class="sp-row">
+          <h3>{L.where}</h3>
+          <p><strong>{v.name}</strong>{v.address && <><br/>{v.address}</>}</p>
+          <p class="sp-links">
+            <a href={`https://www.google.com/maps/search/?api=1&query=${mapQ}`} target="_blank" rel="noopener">{L.map} ↗</a>
+            {v.phone && <a href={'tel:' + v.phone.replace(/\s/g, '')}>{v.phone}</a>}
+          </p>
+        </div>
+      </div>
+    </aside>
   </div>
 
-  <Gallery images={p.gallery} lang={lang}/>
-
-  {trailer && (
-    <section class="detailTrailer">
-            <div class="videoFrame">
-        <iframe src={trailer} title={`${p.title} — trailer`} loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
-      </div>
-    </section>
-  )}
-
-  <a class="lineLink" href={listUrl}>{L.back}</a>
+  <div class="shell"><a class="lineLink sp-back" href={listUrl}>{L.back}</a></div>
 </main>

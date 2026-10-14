@@ -91,6 +91,7 @@ function presentationsOf(runs, spaces) {
       space: s?.name || r.space_name || '',
       start: day(r.start_date),
       end: day(r.end_date),
+      hours: String(r.hours || '').trim(),
       ticketingUrl: /^https?:\/\//i.test(r.ticketing_url || '') ? r.ticketing_url.trim() : '',
     };
   });
@@ -105,6 +106,11 @@ function presentationsOf(runs, spaces) {
     .filter((it) => it.space || !unique.some((o) => o.space && o.start === it.start && o.end === it.end))
     .sort((a, b) => a.start.localeCompare(b.start));
 }
+
+// Free-text production fields from Work, one entry per line.
+// Credits: «Ρόλος: Όνομα, Όνομα» → { role, names }; a line without «:» has only names.
+export const lines = (v) => String(v || '').split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
+export const credits = (v) => lines(v).map((l) => { const i = l.indexOf(':'); return i > 0 ? { role: l.slice(0, i).trim(), names: l.slice(i + 1).trim() } : { role: '', names: l }; });
 
 // "2026-10-25" -> "25/10/2026"
 export const formatDate = (d) => (d ? d.slice(8, 10) + '/' + d.slice(5, 7) + '/' + d.slice(0, 4) : '');
@@ -172,6 +178,8 @@ export async function shows(lang = 'el') {
           short_description: (lang !== 'el' && t.short_description) || p.short_description || '',
           description: (lang !== 'el' && t.description) || p.description || '',
           poster: mediaUrl(p.expand?.poster),
+          hero: mediaUrl(p.expand?.hero_image),
+          venue: { name: venue.name || 'Θέατρο Αθήναιον', address: venue.address || '', phone: venue.phone || '', email: venue.email || '' },
           gallery: (p.expand?.gallery || []).map((m) => ({ src: mediaUrl(m), alt: m.title || '' })).filter((g) => g.src),
           stageTypes,
           displayStatus: finishedHere(associated) ? 'past' : p.display_status || 'now',

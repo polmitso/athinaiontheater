@@ -277,3 +277,20 @@ h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
 @media(max-width:600px){.sp-side{grid-template-columns:1fr}.sp-poster{display:none}.sp-credits div{grid-template-columns:1fr;gap:2px}.sp-hero .heroActions a{flex:1 1 100%;text-align:center}}
 .sp-hero .crumbs a{display:inline!important}
 .sp-hero-img { object-position: center top; }
+
+/* Performances list (10/2026): title with stage switch on the right, status as tabs below */
+.listHead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 32px;margin-bottom:28px}
+.listHead h1{margin:0}
+.stageSwitch{display:inline-flex;gap:0;margin:0;border:1px solid #3a3a3a;padding:3px}
+.stageSwitch .stageFilter{border:0;padding:10px 18px;font-size:12px;letter-spacing:.12em;color:var(--muted);background:transparent}
+.stageSwitch .stageFilter:hover{background:transparent;color:var(--text)}
+.stageSwitch .stageFilter.active{background:var(--brass);color:#000}
+.statusTabs{display:flex;flex-wrap:wrap;gap:4px 28px;margin:0 0 40px;padding-bottom:0;border-bottom:1px solid var(--line)}
+.statusTabs .statusFilter{border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);padding:12px 0;margin-bottom:-1px;font-size:12px;letter-spacing:.14em}
+.statusTabs .statusFilter:hover{background:transparent;color:var(--text)}
+.statusTabs .statusFilter.active{background:transparent;color:var(--text);border-bottom-color:var(--brass)}
+.show .poster{transition:transform .25s ease}
+.show:hover .poster{transform:translateY(-4px)}
+.showStageTags span{font-size:10px;padding:4px 7px}
+@media(max-width:760px){.listHead{align-items:flex-start}.stageSwitch{width:100%}.stageSwitch .stageFilter{flex:1;padding:10px 4px;font-size:10px;letter-spacing:.06em;white-space:nowrap}.statusTabs{gap:4px 14px;overflow-x:auto;flex-wrap:nowrap}.statusTabs .statusFilter{white-space:nowrap;font-size:11px;letter-spacing:.06em}}
+@media(prefers-reduced-motion:reduce){.show .poster{transition:none}.show:hover .poster{transform:none}}

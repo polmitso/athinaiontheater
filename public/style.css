@@ -294,3 +294,4 @@ h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
 .showStageTags span{font-size:10px;padding:4px 7px}
 @media(max-width:760px){.listHead{align-items:flex-start}.stageSwitch{width:100%}.stageSwitch .stageFilter{flex:1;padding:10px 4px;font-size:10px;letter-spacing:.06em;white-space:nowrap}.statusTabs{gap:4px 14px;overflow-x:auto;flex-wrap:nowrap}.statusTabs .statusFilter{white-space:nowrap;font-size:11px;letter-spacing:.06em}}
 @media(prefers-reduced-motion:reduce){.show .poster{transition:none}.show:hover .poster{transform:none}}
+.hs-slide img{object-position:center 25%}.hero{height:clamp(480px,41.67vw,800px)}@media(max-width:650px){.hero{height:560px}}

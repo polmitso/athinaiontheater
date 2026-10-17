@@ -140,6 +140,14 @@ function finishedHere(runs) {
   return runs.length > 0 && runs.every((r) => r.end_date && String(r.end_date).slice(0, 10) < today);
 }
 
+// «Σύντομα» becomes «Παίζει τώρα» by itself on the start date (Work's upcoming_date, or the first Athinaion date).
+function startedNow(p, runs) {
+  if ((p.display_status || 'now') !== 'upcoming') return false;
+  const today = todayAthens();
+  const starts = [day(p.upcoming_date), ...runs.map((r) => day(r.start_date))].filter(Boolean).sort();
+  return starts.length > 0 && starts[0] <= today;
+}
+
 export async function shows(lang = 'el') {
   const [venues, productions, runs, spaces] = await Promise.all([
     list('venues', { filter: 'editorial_status="published"' }),
@@ -182,7 +190,7 @@ export async function shows(lang = 'el') {
           venue: { name: venue.name || 'Θέατρο Αθήναιον', address: venue.address || '', phone: venue.phone || '', email: venue.email || '' },
           gallery: (p.expand?.gallery || []).map((m) => ({ src: mediaUrl(m), alt: m.title || '' })).filter((g) => g.src),
           stageTypes,
-          displayStatus: finishedHere(associated) ? 'past' : p.display_status || 'now',
+          displayStatus: finishedHere(associated) ? 'past' : startedNow(p, associated) ? 'now' : p.display_status || 'now',
           presentations: presentationsOf(associated, spaces),
         };
       })

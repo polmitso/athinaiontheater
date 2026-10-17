@@ -295,3 +295,15 @@ h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
 @media(max-width:760px){.listHead{align-items:flex-start}.stageSwitch{width:100%}.stageSwitch .stageFilter{flex:1;padding:10px 4px;font-size:10px;letter-spacing:.06em;white-space:nowrap}.statusTabs{gap:4px 14px;overflow-x:auto;flex-wrap:nowrap}.statusTabs .statusFilter{white-space:nowrap;font-size:11px;letter-spacing:.06em}}
 @media(prefers-reduced-motion:reduce){.show .poster{transition:none}.show:hover .poster{transform:none}}
 .hs-slide img{object-position:center 25%}.hero{height:clamp(480px,41.67vw,800px)}@media(max-width:650px){.hero{height:560px}}
+
+/* Transparent menu (10/2026): over the page at the top, glass when scrolling. --hh = menu height. */
+:root{--hh:85px}
+@media(max-width:760px){:root{--hh:112px}}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:40;background:transparent;border-bottom:1px solid transparent;transition:background .3s ease,border-color .3s ease}
+.topbar .top{border-bottom:0}
+.topbar.scrolled{background:rgba(0,0,0,.72);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border-bottom-color:var(--line)}
+.innerPage{padding-top:calc(var(--hh) + clamp(48px,6vw,80px))}
+.hero::before,.sp-hero::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(var(--hh) + 80px);background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,0));z-index:2;pointer-events:none}
+.sp-hero-in{padding-top:calc(var(--hh) + clamp(32px,4vw,48px))}
+.heroText{padding-top:var(--hh)}
+@media(prefers-reduced-motion:reduce){.topbar{transition:none}}

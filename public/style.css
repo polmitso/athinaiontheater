@@ -307,3 +307,9 @@ h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
 .sp-hero-in{padding-top:calc(var(--hh) + clamp(32px,4vw,48px))}
 .heroText{padding-top:var(--hh)}
 @media(prefers-reduced-motion:reduce){.topbar{transition:none}}
+/* Menu text: larger and bolder, with a soft shadow so it reads over photos */
+.top nav{font-size:16px;font-weight:500}
+.top nav a,.top .language{text-shadow:0 1px 12px rgba(0,0,0,.55)}
+.top .navItem.current{border-bottom-width:2px}
+.top .language{font-size:14px}
+@media(max-width:760px){.top nav a{font-size:13px}}

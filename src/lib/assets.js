@@ -9,7 +9,7 @@ const ids = {
   upstage: 'x36bdnm6rxknqk8',
   upstageLogo: 'qcefc1nauopqetb',
   centralPlan: 'fq7y4ko3pgas6wr',
-  upstagePlan: '8j6clmwj1ea0pmt',
+  upstagePlan: 'jpsry7xlx2txrll',
 };
 
 export async function assets() {

@@ -318,3 +318,30 @@ h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
 .shows{grid-template-columns:repeat(4,minmax(0,1fr))}
 @media(max-width:1000px){.shows{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:650px){.shows{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Mobile menu (11/2026): hamburger under 760px, full-screen panel with alternating black / grey blocks */
+.navToggle{display:none}
+.mnav[hidden]{display:none}
+@media(max-width:760px){
+:root{--hh:70px}
+.top{flex-wrap:nowrap;min-height:70px;padding-top:10px;padding-bottom:10px}
+.top nav,.top .language{display:none}
+.navToggle{display:inline-flex;flex-direction:column;justify-content:center;gap:6px;width:46px;height:46px;margin-left:auto;margin-right:-8px;padding:0 10px;background:none;border:0;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.navToggle span{display:block;height:2px;background:currentColor;border-radius:2px;box-shadow:0 1px 8px rgba(0,0,0,.5);transition:transform .25s ease,opacity .2s ease}
+.navToggle[aria-expanded=true] span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.navToggle[aria-expanded=true] span:nth-child(2){opacity:0}
+.navToggle[aria-expanded=true] span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.mnav-open,.mnav-open body{overflow:hidden}
+.mnav-open .topbar{background:#000;border-bottom-color:var(--line);backdrop-filter:none;-webkit-backdrop-filter:none}
+.mnav{position:fixed;z-index:39;left:0;right:0;top:var(--hh);bottom:0;background:#000;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column}
+.mnavLinks a{display:flex;align-items:center;min-height:64px;padding:0 4%;font-size:20px;font-weight:500;color:#fff;border-left:4px solid transparent}
+.mnavLinks a:nth-child(odd){background:#000}
+.mnavLinks a:nth-child(even){background:#1c1c1c}
+.mnavLinks a:active{background:#2b2b2b}
+.mnavLinks a.current{border-left-color:var(--brass);color:var(--brass)}
+.mnavLang{display:flex;margin-top:auto;border-top:1px solid var(--line)}
+.mnavLang a{flex:1;display:flex;align-items:center;justify-content:center;min-height:58px;font-size:13px;font-weight:500;letter-spacing:.12em;opacity:.55}
+.mnavLang a+a{border-left:1px solid var(--line)}
+.mnavLang a[aria-current=page]{opacity:1;background:#1c1c1c}
+}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){.navToggle span{transition:none}}

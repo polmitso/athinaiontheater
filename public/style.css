@@ -345,3 +345,6 @@ h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
 .mnavLang a[aria-current=page]{opacity:1;background:#1c1c1c}
 }
 @media(max-width:760px) and (prefers-reduced-motion:reduce){.navToggle span{transition:none}}
+
+/* Αρχική: μικρότερες αφίσες, 5 ανά σειρά σε υπολογιστή */
+@media(min-width:1001px){.showsHome{grid-template-columns:repeat(5,minmax(0,1fr))}}

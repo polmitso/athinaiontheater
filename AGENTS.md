@@ -12,7 +12,8 @@
 - Σελίδα λεπτομερειών: `src/components/ShowDetail.astro` (κοινή για EL/EN).
 - Έλεγχος: `/health.json` πρέπει να δείχνει `"ok": true`.
 - Προαιρετικές μεταβλητές: `POCKETBASE_INTERNAL_URL`, `ATHINAION_VENUE_ID`, `ATHINAION_VENUE_SLUG`.
-- Σελίδες: Τι παίζει (`/parastaseis`), Οι σκηνές, **Σχολεία** (`src/components/Schools.astro`), Ενοικίαση, Επικοινωνία — EL/EN.
+- Σελίδες (μενού): Παραστάσεις (`/parastaseis`), Οι σκηνές, **Σχολεία** (`src/components/Schools.astro`), Επικοινωνία — EL/EN.
+- Η Ενοικίαση δεν είναι πια στο μενού: είναι ενότητα «Πληροφορίες για ενοικίαση» μέσα στην Επικοινωνία (`#enoikiasi` / `/en/contact#venue-hire`), κάτω από χάρτη και τηλέφωνα. Τα παλιά `/enoikiasi` και `/en/venue-hire` κάνουν 301 εκεί.
 - Λογότυπο/φωτογραφίες με media record ID: `src/lib/assets.js`.
 - Hero αρχικής: `heroSlides()` + `src/components/HeroSlides.astro` (από Work → Hero αρχικής, site `athinaion`). Gallery: `src/components/Gallery.astro`.
 - Umami script στο `src/layouts/Site.astro`. Domain: https://athinaiontheater.gr

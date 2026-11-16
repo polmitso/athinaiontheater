@@ -348,3 +348,5 @@ h2{font-size:clamp(28px,2.6vw,36px);line-height:1.15;margin:0}
 
 /* Αρχική: μικρότερες αφίσες, 5 ανά σειρά σε υπολογιστή */
 @media(min-width:1001px){.showsHome{grid-template-columns:repeat(5,minmax(0,1fr))}}
+
+.hireInfo{margin-top:80px;padding-top:56px;border-top:1px solid var(--line,#292929);scroll-margin-top:110px}.hireInfo h2{font-size:clamp(26px,2.4vw,34px);margin:0 0 14px}.hireInfo .floorPlans{margin:28px 0}
